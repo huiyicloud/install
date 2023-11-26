@@ -20,11 +20,16 @@ cat << "EOF"
         ======`-.____`-.___\_____/___.-`____.-'======
                            `=---='
         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                 佛祖保佑       永无BUG
+                 欢迎使用       晷蓝CDN系统
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 最新版本       v0.0.1
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 请选择安装     版本
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+                 
 EOF
-echo "欢迎使用晷蓝CDN系统"
-echo "当前最新版本为 0.0.1"
-echo "请选择您要安装的版本："
+
 echo "1. 宝塔版本"
 echo "2. 边缘节点系统"
 read -p "请输入选项 (1 或 2): " version
@@ -38,16 +43,26 @@ progress_bar() {
     echo -e "\n操作完成"
 }
 
+check_command() {
+    if ! command -v $1 &> /dev/null; then
+        echo "错误：需要的命令 $1 未安装。"
+        exit 1
+    fi
+}
+
 if [ "$version" == "1" ]; then
     echo "您选择了宝塔版本"
 
+    # 检查 git 命令是否存在
+    check_command git
+
     # 安装 Composer
     echo "安装 Composer..."
-    progress_bar
+    progress_bar  # 这里应添加实际的安装命令
 
     # 下载 GitHub 源码
     echo "下载 GitHub 源码..."
-    git clone [your-github-repo-url] /desired/location
+    git clone [your-github-repo-url] /desired/location || { echo "克隆失败"; exit 1; }
     progress_bar
 
     echo "宝塔版本安装完成"
@@ -55,24 +70,26 @@ if [ "$version" == "1" ]; then
 elif [ "$version" == "2" ]; then
     echo "您选择了边缘节点系统"
 
+    check_command git
+
     # 下载 GitHub 源码
     echo "下载 GitHub 源码..."
-    git clone [your-github-repo-url] /desired/location
+    git clone [your-github-repo-url] /desired/location || { echo "克隆失败"; exit 1; }
     progress_bar
 
     # 安装 PHP 8.0
     echo "安装 PHP 8.0..."
-    # 添加安装 PHP 8.0 的命令
+    # 这里添加安装 PHP 8.0 的实际命令
     progress_bar
 
     # 安装 Composer
     echo "安装 Composer..."
-    # 添加安装 Composer 的命令
+    # 这里添加安装 Composer 的实际命令
     progress_bar
 
     # 安装 Nginx
     echo "安装 Nginx..."
-    # 添加安装 Nginx 的命令
+    # 这里添加安装 Nginx 的实际命令
     progress_bar
 
     echo "边缘节点系统安装完成"
