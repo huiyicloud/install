@@ -30,79 +30,79 @@ cat << "EOF"
                  
 EOF
 
-# 暂停 3 秒并显示进度条
-echo -n "正在准备: "
-for i in {1..3}; do
-    echo -n "."
-    sleep 1
-done
-echo -e "\n准备完成"
-
-echo "1. 宝塔版本"
-echo "2. 边缘节点系统"
-read -p "请输入选项 (1 或 2) 然后按回车键: " version
-echo "您输入的选项是: $version"  # 调试输出
-
+# 进度条函数
 progress_bar() {
-    echo -n "正在进行: "
-    for i in {1..50}; do
-        echo -n "#"
-        sleep 0.1
-    done
-    echo -e "\n操作完成"
+    local progress=$1
+    let "filled=($progress * 50 / 100)"
+    let "empty=50-$filled"
+    printf "\r["
+    printf "%0.s#" $(seq 1 $filled)
+    printf "%0.s-" $(seq 1 $empty)
+    printf "] %d%%" $progress
 }
 
-check_command() {
-    if ! command -v $1 &> /dev/null; then
-        echo "错误：需要的命令 $1 未安装。"
-        exit 1
-    fi
-}
+# 初始化进度
+progress=0
+echo -n "初始化进度: "
+progress_bar $progress
 
-if [ "$version" == "1" ]; then
-    echo "您选择了宝塔版本"
+# 暂停 3 秒并显示进度条
+echo -n "\n正在准备环境: "
+for i in {1..3}; do
+    sleep 1
+    progress=$((progress + 10))
+    progress_bar $progress
+done
+echo -e "\n环境准备完成"
 
-    # 检查 git 命令是否存在
-    check_command git
+# 检查 Nginx 和 PHP 是否已安装
+echo -n "\n检查 Nginx 和 PHP..."
+sleep 2  # 模拟检查过程
+progress=$((progress + 10))
+progress_bar $progress
 
-    # 安装 Composer
-    echo "安装 Composer..."
-    progress_bar  # 这里应添加实际的安装命令
+# 安装 PHP 8.0
+echo -n "\n安装 PHP 8.0..."
+# 添加安装 PHP 8.0 的命令
+sleep 2  # 模拟安装过程
+progress=$((progress + 20))
+progress_bar $progress
 
-    # 下载 GitHub 源码
-    echo "下载 GitHub 源码..."
-    git clone [your-github-repo-url] /desired/location || { echo "克隆失败"; exit 1; }
-    progress_bar
+# 安装 Composer
+echo -n "\n安装 Composer..."
+# 添加安装 Composer 的命令
+sleep 2  # 模拟安装过程
+progress=$((progress + 20))
+progress_bar $progress
 
-    echo "宝塔版本安装完成"
+# 从 GitHub 下载源码压缩包
+echo -n "\n下载源码..."
+# 替换为您的 GitHub 仓库地址
+# curl -L [your-github-repo-url] -o source.zip
+# unzip source.zip -d source
+# cd source
+sleep 2  # 模拟下载和解压过程
+progress=$((progress + 10))
+progress_bar $progress
 
-elif [ "$version" == "2" ]; then
-    echo "您选择了边缘节点系统"
+# 安装 Nginx
+echo -n "\n安装 Nginx..."
+# 替换为 Nginx 下载地址
+# curl -L [nginx-download-url] | tar -xz
+# 添加安装 Nginx 的命令
+sleep 2  # 模拟安装过程
+progress=$((progress + 20))
+progress_bar $progress
 
-    check_command git
+# 启动 PHP 脚本
+echo -n "\n启动 PHP 脚本..."
+# php start.php start
+# 添加进程守护的命令（如果需要）
+sleep 2  # 模拟启动过程
+progress=$((progress + 10))
+progress_bar $progress
 
-    # 下载 GitHub 源码
-    echo "下载 GitHub 源码..."
-    git clone [your-github-repo-url] /desired/location || { echo "克隆失败"; exit 1; }
-    progress_bar
-
-    # 安装 PHP 8.0
-    echo "安装 PHP 8.0..."
-    # 这里添加安装 PHP 8.0 的实际命令
-    progress_bar
-
-    # 安装 Composer
-    echo "安装 Composer..."
-    # 这里添加安装 Composer 的实际命令
-    progress_bar
-
-    # 安装 Nginx
-    echo "安装 Nginx..."
-    # 这里添加安装 Nginx 的实际命令
-    progress_bar
-
-    echo "边缘节点系统安装完成"
-
-else
-    echo "无效的输入！"
-fi
+echo "\n安装成功！进度达到 100%"
+progress=100
+progress_bar $progress
+echo -e "\n"
