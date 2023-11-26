@@ -30,9 +30,17 @@ cat << "EOF"
                  
 EOF
 
+# 暂停 3 秒并显示进度条
+echo -n "正在准备: "
+for i in {1..3}; do
+    echo -n "."
+    sleep 1
+done
+echo -e "\n准备完成"
+
 echo "1. 宝塔版本"
 echo "2. 边缘节点系统"
-read -p "请输入选项 (1 或 2): " version
+read -p "请输入选项 (1 或 2) 然后按回车键: " version
 
 progress_bar() {
     echo -n "正在进行: "
