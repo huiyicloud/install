@@ -41,6 +41,7 @@ echo -e "\n准备完成"
 echo "1. 宝塔版本"
 echo "2. 边缘节点系统"
 read -p "请输入选项 (1 或 2) 然后按回车键: " version
+echo "您输入的选项是: $version"  # 调试输出
 
 progress_bar() {
     echo -n "正在进行: "
